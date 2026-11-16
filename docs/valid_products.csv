@@ -1,0 +1,4 @@
+product_code,product_name,category,price,stock_quantity,status
+DEMO-CSV-001,Wireless Keyboard,Accessories,850.00,25,active
+DEMO-CSV-002,USB Mouse,Accessories,450.00,40,active
+DEMO-CSV-003,Monitor Stand,Office,1200.00,15,active

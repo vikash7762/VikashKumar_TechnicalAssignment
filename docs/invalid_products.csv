@@ -1,0 +1,6 @@
+product_code,product_name,category,price,stock_quantity,status
+DEMO-CSV-101,Test Keyboard,Accessories,850.00,10,active
+DEMO-CSV-102,Invalid Mouse,Accessories,-450.00,20,active
+DEMO-CSV-101,Duplicate Code,Accessories,200.00,5,active
+DEMO-CSV-104,Test Monitor,Office,1200.00,-1,active
+DEMO-CSV-105,Invalid Status,Office,500.00,3,unknown
