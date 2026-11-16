@@ -1,0 +1,737 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Customers | StockFlow</title>
+
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f4f6fb;
+            color: #172033;
+        }
+
+        .layout { display: flex; min-height: 100vh; }
+
+        .sidebar {
+            width: 245px;
+            background: #14254d;
+            color: white;
+            padding: 25px 16px;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+        }
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 11px;
+            padding: 0 10px 32px;
+            font-size: 21px;
+            font-weight: 750;
+        }
+
+        .brand-icon {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            background: #3475db;
+            display: grid;
+            place-items: center;
+            font-size: 21px;
+        }
+
+        .nav-label {
+            color: #91a4c8;
+            font-size: 10px;
+            font-weight: 700;
+            letter-spacing: 1.5px;
+            padding: 0 12px;
+            margin: 10px 0 12px;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 12px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            color: #d1dcef;
+            text-decoration: none;
+            font-size: 13px;
+        }
+
+        .nav-link:hover, .nav-link.active {
+            background: #294576;
+            color: white;
+        }
+
+        .nav-icon { width: 20px; text-align: center; font-size: 16px; }
+
+        .sidebar-bottom {
+            margin-top: auto;
+            padding: 15px 10px 0;
+            border-top: 1px solid #31466e;
+            color: #aebed9;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .main { flex: 1; min-width: 0; }
+
+        .topbar {
+            height: 75px;
+            background: white;
+            border-bottom: 1px solid #e9edf4;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 34px;
+        }
+
+        .topbar h2 { font-size: 19px; }
+
+        .topbar-right { display: flex; align-items: center; gap: 14px; }
+
+        .role-badge {
+            background: #edf4ff;
+            color: #2869ce;
+            padding: 7px 12px;
+            border-radius: 20px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .logout-btn {
+            border: 1px solid #e0e5ed;
+            background: white;
+            padding: 9px 14px;
+            border-radius: 7px;
+            color: #536176;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 650;
+        }
+
+        .logout-btn:hover { background: #fff1f1; color: #c53030; }
+
+        .content { padding: 32px 34px; max-width: 1450px; margin: auto; }
+
+        .page-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            gap: 15px;
+            margin-bottom: 25px;
+        }
+
+        .page-heading h1 { font-size: 25px; margin-bottom: 7px; }
+        .page-heading p { color: #8490a3; font-size: 13px; }
+
+        .primary-btn {
+            border: none;
+            background: #2869ce;
+            color: white;
+            padding: 11px 17px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 700;
+            cursor: pointer;
+        }
+
+        .primary-btn:hover { background: #1d55ae; }
+        .primary-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        .panel {
+            background: white;
+            border: 1px solid #e9edf4;
+            border-radius: 12px;
+            padding: 22px;
+            margin-bottom: 20px;
+            box-shadow: 0 3px 12px rgba(20, 40, 80, 0.025);
+        }
+
+        .panel-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 19px;
+        }
+
+        .panel-heading h3 { font-size: 15px; }
+        .panel-heading p { color: #8994a5; font-size: 11px; margin-top: 5px; }
+
+        .search-input {
+            width: 100%;
+            max-width: 330px;
+            height: 40px;
+            border: 1px solid #dce3ed;
+            border-radius: 8px;
+            padding: 0 13px;
+            outline: none;
+            font-size: 12px;
+            background: #fbfcfe;
+        }
+
+        input:focus {
+            border-color: #3475db;
+            box-shadow: 0 0 0 3px rgba(52, 117, 219, 0.10);
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 17px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 12px;
+            font-weight: 650;
+            color: #536176;
+            margin-bottom: 8px;
+        }
+
+        .form-group input {
+            width: 100%;
+            height: 42px;
+            border: 1px solid #dce3ed;
+            border-radius: 8px;
+            padding: 0 12px;
+            outline: none;
+            font-size: 12px;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 19px;
+        }
+
+        .secondary-btn {
+            border: 1px solid #dce3ed;
+            background: white;
+            color: #536176;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 650;
+            cursor: pointer;
+        }
+
+        .table-wrap { overflow-x: auto; }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 650px;
+        }
+
+        th {
+            text-align: left;
+            padding: 13px 12px;
+            background: #f8f9fc;
+            color: #8490a3;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            font-weight: 700;
+            border-bottom: 1px solid #e9edf4;
+        }
+
+        td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #edf0f5;
+            font-size: 12px;
+            color: #46536a;
+        }
+
+        tbody tr:hover { background: #fbfcff; }
+
+        .customer-name { color: #172033; font-weight: 650; }
+
+        .status {
+            display: inline-block;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 10px;
+            font-weight: 700;
+            background: #eaf8f0;
+            color: #219653;
+        }
+
+        .status.inactive {
+            background: #fff0f0;
+            color: #cf4545;
+        }
+
+        .action-btn {
+            border: 1px solid #dce3ed;
+            background: white;
+            padding: 6px 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 10px;
+            font-weight: 650;
+            margin-right: 4px;
+            margin-bottom: 3px;
+        }
+
+        .edit-btn { color: #2869ce; }
+        .delete-btn { color: #cf4545; }
+
+        .empty-state {
+            text-align: center;
+            padding: 35px 15px;
+            color: #8994a5;
+            font-size: 12px;
+        }
+
+        #message { font-size: 12px; margin-top: 12px; }
+        .hidden { display: none !important; }
+
+        @media (max-width: 900px) {
+            .content { padding: 25px 18px; }
+            .topbar { padding: 0 18px; }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar { width: 65px; padding: 20px 8px; }
+            .brand { justify-content: center; padding: 0 0 30px; }
+            .brand span, .nav-label, .nav-link span:last-child,
+            .sidebar-bottom { display: none; }
+            .nav-link { justify-content: center; padding: 13px 5px; }
+            .nav-icon { width: auto; }
+            .form-grid { grid-template-columns: 1fr; }
+            .page-heading { align-items: flex-start; flex-direction: column; }
+            .panel { padding: 16px; }
+            .panel-heading { align-items: flex-start; flex-direction: column; }
+            .search-input { max-width: none; }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="layout">
+
+    <aside class="sidebar">
+        <div class="brand">
+            <div class="brand-icon">▦</div>
+            <span>StockFlow</span>
+        </div>
+
+        <div class="nav-label">WORKSPACE</div>
+
+        <a href="/frontend/dashboard.html" class="nav-link">
+            <span class="nav-icon">▦</span>
+            <span>Dashboard</span>
+        </a>
+
+        <a href="/frontend/customers.html" class="nav-link active">
+            <span class="nav-icon">♙</span>
+            <span>Customers</span>
+        </a>
+
+        <a href="/frontend/products.html" class="nav-link">
+            <span class="nav-icon">▣</span>
+            <span>Products</span>
+        </a>
+
+        <a href="/frontend/orders.html" class="nav-link">
+            <span class="nav-icon">▤</span>
+            <span>Sales Orders</span>
+        </a>
+
+        <div class="sidebar-bottom">
+            StockFlow<br>
+            Sales & Inventory Management
+        </div>
+    </aside>
+
+    <main class="main">
+
+        <header class="topbar">
+            <h2>Customers</h2>
+
+            <div class="topbar-right">
+                <span class="role-badge" id="roleDisplay">USER</span>
+                <button class="logout-btn" onclick="logout()">↪ Logout</button>
+            </div>
+        </header>
+
+        <section class="content">
+
+            <div class="page-heading">
+                <div>
+                    <h1>Customer Management</h1>
+                    <p>Manage your customer records and contact information.</p>
+                </div>
+
+                <button class="primary-btn" id="addCustomerBtn" onclick="showForm()">
+                    + Add Customer
+                </button>
+            </div>
+
+            <section class="panel hidden" id="customerFormPanel">
+                <div class="panel-heading">
+                    <div>
+                        <h3 id="formTitle">Add New Customer</h3>
+                        <p>Enter the customer's details below.</p>
+                    </div>
+                </div>
+
+                <form id="customerForm">
+
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="name">Customer Name</label>
+                            <input type="text" id="name" required placeholder="Enter customer name">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="email">Email Address</label>
+                            <input type="email" id="email" required placeholder="customer@example.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="phone">Mobile Number</label>
+                            <input type="text" id="phone" required placeholder="Enter mobile number">
+                        </div>
+
+                        <div class="form-group">
+                            <label for="address">City / Address</label>
+                            <input type="text" id="address" required placeholder="Enter city or address">
+                        </div>
+
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="submit" class="primary-btn" id="saveBtn">
+                            Save Customer
+                        </button>
+                        <button type="button" class="secondary-btn" onclick="hideForm()">
+                            Cancel
+                        </button>
+                    </div>
+
+                    <p id="message" role="alert"></p>
+
+                </form>
+            </section>
+
+            <section class="panel">
+
+                <div class="panel-heading">
+                    <div>
+                        <h3>Customer Directory</h3>
+                        <p id="customerCount">Loading customers...</p>
+                    </div>
+
+                    <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                        <input type="search" id="searchInput" class="search-input" placeholder="Search by name, email or mobile...">
+                        <select id="statusFilter" class="search-input" style="max-width:150px">
+                            <option value="active">Active</option>
+                            <option value="inactive">Inactive</option>
+                            <option value="all">All statuses</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="table-wrap">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Customer</th>
+                                <th>Email</th>
+                                <th>Mobile</th>
+                                <th>Address</th>
+                                <th>Status</th>
+                                <th id="actionsHeading">Actions</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="customerTable">
+                            <tr>
+                                <td colspan="6" class="empty-state">Loading customers...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </section>
+
+        </section>
+    </main>
+</div>
+
+<script>
+    const API_URL = "http://127.0.0.1:8000";
+    const token = localStorage.getItem("access_token");
+    const role = localStorage.getItem("user_role");
+
+    let customers = [];
+    let editingId = null;
+
+    if (!token) {
+        window.location.href = "/frontend/login.html";
+    }
+
+    const isAdmin = role === "admin";
+
+    document.getElementById("roleDisplay").textContent =
+        role ? role.replace("_", " ").toUpperCase() : "USER";
+
+    if (!isAdmin) {
+        document.getElementById("addCustomerBtn").classList.add("hidden");
+        document.getElementById("actionsHeading").classList.add("hidden");
+    }
+
+    async function apiRequest(endpoint, method = "GET", body = null) {
+        const options = {
+            method,
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        };
+
+        if (body !== null) {
+            options.headers["Content-Type"] = "application/json";
+            options.body = JSON.stringify(body);
+        }
+
+        const response = await fetch(`${API_URL}${endpoint}`, options);
+        const data = await response.json().catch(() => ({}));
+
+        if (response.status === 401) {
+            logout();
+            throw new Error("Session expired. Please log in again.");
+        }
+
+        if (!response.ok) {
+            throw new Error(data.detail || "Something went wrong.");
+        }
+
+        return data;
+    }
+
+    async function loadCustomers() {
+        const table = document.getElementById("customerTable");
+
+        try {
+            const status = isAdmin ? document.getElementById("statusFilter").value : "active";
+            const search = document.getElementById("searchInput").value.trim();
+            const params = new URLSearchParams({ status });
+            if (search) params.set("search", search);
+            const data = await apiRequest(`/customers/?${params.toString()}`);
+
+            customers = Array.isArray(data) ? data : [];
+
+            document.getElementById("customerCount").textContent =
+                `${customers.length} customer record(s)`;
+
+            renderCustomers();
+
+        } catch (error) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty-state">
+                        ${escapeHtml(error.message)}
+                    </td>
+                </tr>`;
+        }
+    }
+
+    function renderCustomers() {
+        const table = document.getElementById("customerTable");
+        const search = document.getElementById("searchInput").value.toLowerCase().trim();
+
+        const filtered = customers.filter(customer => {
+            return [
+                customer.name,
+                customer.email,
+                customer.phone,
+                customer.address
+            ].some(value => String(value ?? "").toLowerCase().includes(search));
+        });
+
+        document.getElementById("customerCount").textContent =
+            `${filtered.length} of ${customers.length} customer record(s)`;
+
+        if (filtered.length === 0) {
+            table.innerHTML = `
+                <tr>
+                    <td colspan="6" class="empty-state">No customers found.</td>
+                </tr>`;
+            return;
+        }
+
+        table.innerHTML = filtered.map(customer => {
+            const active = customer.is_active !== false && customer.is_active !== 0;
+
+            return `
+                <tr>
+                    <td class="customer-name">${escapeHtml(customer.name)}</td>
+                    <td>${escapeHtml(customer.email)}</td>
+                    <td>${escapeHtml(customer.phone)}</td>
+                    <td>${escapeHtml(customer.address)}</td>
+
+                    <td>
+                        <span class="status ${active ? "" : "inactive"}">
+                            ${active ? "Active" : "Inactive"}
+                        </span>
+                    </td>
+
+                    ${isAdmin ? `
+                        <td>
+                            <button class="action-btn edit-btn"
+                                onclick="editCustomer(${Number(customer.id)})">
+                                Edit
+                            </button>
+
+                            <button class="action-btn delete-btn"
+                                onclick="deactivateCustomer(${Number(customer.id)})">
+                                Deactivate
+                            </button>
+                        </td>
+                    ` : ""}
+                </tr>
+            `;
+        }).join("");
+    }
+
+    function showForm() {
+        editingId = null;
+
+        document.getElementById("customerForm").reset();
+        document.getElementById("formTitle").textContent = "Add New Customer";
+        document.getElementById("saveBtn").textContent = "Save Customer";
+        document.getElementById("message").textContent = "";
+        document.getElementById("customerFormPanel").classList.remove("hidden");
+
+        document.getElementById("name").focus();
+    }
+
+    function hideForm() {
+        document.getElementById("customerFormPanel").classList.add("hidden");
+        document.getElementById("customerForm").reset();
+        editingId = null;
+        document.getElementById("saveBtn").textContent = "Save Customer";
+    }
+
+    function editCustomer(id) {
+        const customer = customers.find(item => Number(item.id) === id);
+        if (!customer) return;
+
+        editingId = id;
+
+        document.getElementById("name").value = customer.name ?? "";
+        document.getElementById("email").value = customer.email ?? "";
+        document.getElementById("phone").value = customer.phone ?? "";
+        document.getElementById("address").value = customer.address ?? "";
+
+        document.getElementById("formTitle").textContent = "Edit Customer";
+        document.getElementById("saveBtn").textContent = "Update Customer";
+        document.getElementById("message").textContent = "";
+        document.getElementById("customerFormPanel").classList.remove("hidden");
+
+        document.getElementById("name").focus();
+    }
+
+    document.getElementById("customerForm").addEventListener("submit", async function(event) {
+        event.preventDefault();
+
+        if (!isAdmin) return;
+
+        const wasEditing = editingId !== null;
+
+        const payload = {
+            name: document.getElementById("name").value.trim(),
+            email: document.getElementById("email").value.trim(),
+            phone: document.getElementById("phone").value.trim(),
+            address: document.getElementById("address").value.trim()
+        };
+
+        if (!payload.name || !payload.email || !payload.phone || !payload.address) {
+            document.getElementById("message").style.color = "#cf4545";
+            document.getElementById("message").textContent =
+                "Please complete all customer fields.";
+            return;
+        }
+
+        const button = document.getElementById("saveBtn");
+        const message = document.getElementById("message");
+
+        button.disabled = true;
+        button.textContent = "Saving...";
+        message.textContent = "";
+
+        try {
+            if (wasEditing) {
+                await apiRequest(`/customers/${editingId}`, "PUT", payload);
+            } else {
+                await apiRequest("/customers/", "POST", payload);
+            }
+
+            hideForm();
+            await loadCustomers();
+
+        } catch (error) {
+            message.style.color = "#cf4545";
+            message.textContent = error.message;
+        } finally {
+            button.disabled = false;
+            button.textContent = wasEditing ? "Update Customer" : "Save Customer";
+        }
+    });
+
+    async function deactivateCustomer(id) {
+        if (!isAdmin) return;
+
+        const confirmed = confirm("Are you sure you want to deactivate this customer?");
+        if (!confirmed) return;
+
+        try {
+            await apiRequest(`/customers/${id}`, "DELETE");
+            await loadCustomers();
+
+        } catch (error) {
+            alert(error.message);
+        }
+    }
+
+    document.getElementById("searchInput").addEventListener("input", renderCustomers);
+    document.getElementById("statusFilter").addEventListener("change", loadCustomers);
+    if (!isAdmin) document.getElementById("statusFilter").classList.add("hidden");
+
+    function escapeHtml(value) {
+        return String(value ?? "").replace(/[&<>"']/g, char => ({
+            "&": "&amp;",
+            "<": "&lt;",
+            ">": "&gt;",
+            '"': "&quot;",
+            "'": "&#39;"
+        })[char]);
+    }
+
+    function logout() {
+        localStorage.removeItem("access_token");
+        localStorage.removeItem("user_role");
+        window.location.href = "/frontend/login.html";
+    }
+
+    if (token) {
+        loadCustomers();
+    }
+</script>
+
+</body>
+</html>
